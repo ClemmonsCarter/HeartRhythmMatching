@@ -1,0 +1,427 @@
+<!doctype html><html><head><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"><script type="text/javascript" src="https://unpkg.com/bootstrap/dist/js/bootstrap.min.js"></script><style type="text/css">.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 90vh;
+    position: relative; /* Add this line to set a relative position */
+}
+h1 {
+  text-align: center; /* Center the text horizontally */
+  border: 2px solid #000; /* Add a border (adjust color as needed) */
+  padding: 10px; /* Add padding for better appearance */
+  margin: 10px
+}
+.text-container {
+    position: relative; /* Add this line to set a relative position */
+}
+
+.line-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Ensure that the container doesn't interfere with mouse events */
+}
+
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-container-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-container, .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.draggable-image, .draggable-text {
+    margin: 10px;
+}
+.draggable-text{
+  margin: 10px;
+  border: 1px solid #000;
+  padding: 10px;
+  display: inline-block;
+}
+.draggable-image {
+  width: 120px;
+  height: 120px;
+}
+
+.line {
+    stroke: #000;
+    stroke-width: 2;
+}
+.error-message, .success-message {
+  display: none; /* Hide messages by default */
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 130px; /* Adjust the top position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: #ffe6e6; /* Light red background for error messages */
+  z-index: 999; /* Ensure messages appear above other elements */
+  width: fit-content; /* Adjust the width as needed */
+  border: 2px solid transparent; /* Initial transparent border */
+}
+
+.error-message {
+  border-color: #ff0000; /* Red border for error messages */
+}
+
+.success-message {
+  border-color: #00cc00; /* Green border for success messages */
+  background-color: #e6ffe6; /* Light green background for success messages */
+}
+
+/* Show messages when they have content */
+.error-message:empty, .success-message:empty {
+  display: none;
+}
+
+#print-icon {
+  position: absolute;
+  top: 90px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.flex {
+  display: flex;
+}
+
+.instructions-text, .instructions2-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 170px;
+}
+
+</style></head><body><!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles.css">
+	<title>Mandatory Annual Heart Rhythm Exam</title>
+
+</head>
+<!-- Add this div for displaying error messages -->
+
+
+<body>
+	<h1>Mandatory Annual Heart Rhythm Exam</h1>
+	<div id="error-message" class="error-message"></div>
+	<div id="success-message" class="success-message"></div>
+	<div id="print-icon" class="print-icon" onclick="printPage()">
+		Print
+	</div>
+	<div id="instructions1" class="instructions-text">
+	Drag the image to the heart rhythm that best matches the description.
+	</div>
+	<div id="instructions2" class="instructions-text hidden">
+		Draw a line between the image to the heart rhythm that best matches the description.
+	</div>
+	<div class="container">
+		<div class="column" id="left-column" data-column="left">
+			<div class="image-container" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/platypus.png?raw=true" id="image1" data-column="left" class="draggable-image" draggable="true" ondragstart="drag(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/pangolin.png?raw=true" id="image2" data-column="left" class="draggable-image" draggable="true" ondragstart="drag(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/doggo.png?raw=true" id="image3" data-column="left" class="draggable-image" draggable="true" ondragstart="drag(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/lizard.png?raw=true" id="image4" data-column="left" class="draggable-image" draggable="true" ondragstart="drag(event)">
+
+			</div>
+		</div>
+			<!-- Add more images as needed -->
+		<div class="column" data-column="middle">
+			<div class="text-container-column" data-column="middle" ondrop="drop(event)" ondragover="allowDrop(event)">
+					<p id="text1" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">V-fib</p>
+					<p id="text2" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Bradycardia</p>
+					<p id="text3" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Normal Sinus Rhythm</p>
+					<p id="text4" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Supra Ventricular Tachycardia</p>
+					<p id="text5" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Atrial Flutter</p>
+					<p id="text6" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Premature Ventricular Contraction</p>
+					<p id="text7" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Third Degree Heart Block</p>
+					<p id="text8" data-column="middle" class="draggable-text" data-draggable="true" draggable="true" ondragstart="drag(event)">Ventricular Tachycardia</p>
+			</div>
+		</div>
+		<div class="column" id="right-column" data-column="right">
+			<div class="image-container" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/birb.png?raw=true" id="image5" data-column="right" class="draggable-image" draggable="true" ondragstart="drag(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/fish.png?raw=true" id="image6" data-column="right" class="draggable-image" draggable="true" ondragstart="drag(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/moth.png?raw=true" id="image7" data-column="right" class="draggable-image" draggable="true" ondragstart="drag(event)">
+				<img src="https://github.com/ClemmonsCarter/HeartRhythmMatching/blob/main/Content/chimp.png?raw=true" id="image8" data-column="right" class="draggable-image" draggable="true" ondragstart="drag(event)">
+			</div>
+		</div>
+		<svg id="svg-container" class="line-container"></svg>
+</div>
+	<script src="script.js"></script>
+</body>
+
+</html><script type="text/javascript">// Define the correct associations between images and text
+const correctMatches = {
+  'image1': 'text1',
+  'image2': 'text2',
+  'image3': 'text3',
+  'image4': 'text4',
+  'image5': 'text5',
+  'image6': 'text6',
+  'image7': 'text7',
+  'image8': 'text8',
+  // Add more associations as needed
+};
+
+// Track the current matches during drag and drop interactions
+let currentMatches = {};
+
+// Shuffle function to randomly rearrange array elements
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// Arrays to store image and text elements
+const leftImageElements = document.querySelectorAll('#left-column .draggable-image');
+const rightImageElements = document.querySelectorAll('#right-column .draggable-image');
+const textElements = document.querySelectorAll('.draggable-text');
+
+// Convert NodeLists to arrays
+const leftImagesArray = Array.from(leftImageElements);
+const rightImagesArray = Array.from(rightImageElements);
+const textArray = Array.from(textElements);
+
+// Shuffle the arrays
+shuffleArray(leftImagesArray);
+shuffleArray(rightImagesArray);
+shuffleArray(textArray);
+
+// Get the containers
+const leftImageContainer = document.querySelector('#left-column .image-container');
+const rightImageContainer = document.querySelector('#right-column .image-container');
+const textContainer = document.querySelector('.text-container-column');
+
+// Clear existing content from containers
+leftImageContainer.innerHTML = '';
+rightImageContainer.innerHTML = '';
+textContainer.innerHTML = '';
+
+// Append shuffled elements to containers
+leftImagesArray.forEach(image => leftImageContainer.appendChild(image));
+rightImagesArray.forEach(image => rightImageContainer.appendChild(image));
+textArray.forEach(text => textContainer.appendChild(text));
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+  console.log('Dragging:', ev.target.id);
+}
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drop(ev) {
+  ev.preventDefault();
+
+  var data = ev.dataTransfer.getData("text");
+  var draggedElement = document.getElementById(data);
+
+  // Get the element under the mouse when the drop occurs
+  var dropTarget = document.elementFromPoint(ev.clientX, ev.clientY);
+
+  // Check if dropped on text container
+  if (dropTarget.classList.contains('draggable-text')) {
+    // Get column information
+    var columnId = dropTarget.closest('.column').id;
+
+    // Get the corresponding image id based on the text id
+    var correspondingImageId = 'image' + dropTarget.id.slice(4);
+    var correspondingImage = document.getElementById(correspondingImageId);
+
+    // Check if the dragged image matches the corresponding text image
+    if (draggedElement === correspondingImage) {
+      // Add the match to the currentMatches object
+      currentMatches[correspondingImageId] = dropTarget.id;
+
+      // Add a class to the drop target for styling (optional)
+      dropTarget.classList.add('drop-target');
+
+      // Determine the textElementId associated with the successful match
+      const successfulMatchImageId = correspondingImageId;
+      const textElementId = correctMatches[successfulMatchImageId];
+
+      // Create a line between image and text based on column information
+      var svgContainer = document.getElementById('svg-container');
+      createLine(svgContainer, draggedElement, dropTarget, columnId)
+
+      // Check for success condition
+      if (checkForSuccess()) {
+        // Display success message
+        displaySuccessMessage('All matches are correct!', textElementId);
+      } else {
+        // Clear any existing success message
+        clearSuccessMessage(textElementId);
+      }
+
+      // Clear any existing error message
+      clearErrorMessage();
+    } else {
+      // Display error message
+      displayErrorMessage('Incorrect. Please try again.');
+    }
+  }
+}
+
+function checkForSuccess() {
+  // Check if all matches are correct
+  
+  for (const imageId in correctMatches) {
+    if (correctMatches.hasOwnProperty(imageId)) {
+      const textId = correctMatches[imageId];
+
+      // Check if the current match is correct
+      if (currentMatches[imageId] !== textId) {
+        return false; // If any match is incorrect, return false
+      }
+    }
+  }
+
+  return true; // All matches are correct
+}
+
+function displaySuccessMessage(message, textElementId) {
+  // Display the success message to the user
+  console.log('Display Success Message:', message, textElementId);
+  var successMessageElement = document.getElementById('success-message');
+  successMessageElement.textContent = message;
+  successMessageElement.style.display = 'flex'
+
+}
+
+function clearSuccessMessage(textElementId) {
+  // Clear any existing success message
+  console.log('Clear Success Message:', textElementId);
+  var successMessageElement = document.getElementById('success-message');
+  successMessageElement.textContent = '';
+}
+
+function displayErrorMessage(message) {
+  var errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = message;
+  errorMessageElement.style.display = 'flex'; // Ensure the element is visible
+}
+
+function clearErrorMessage() {
+  var errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = ''; // Clear the message content
+  errorMessageElement.style.display = 'none'; // Hide the error message
+}
+
+
+function createLine(svgContainer, startElement, endElement, columnId) {
+  console.log('Creating Line');
+  console.log('Start Element:', startElement);
+  console.log('End Element:', endElement);
+
+  var svgNS = "http://www.w3.org/2000/svg";
+  var line = document.createElementNS(svgNS, 'line');
+
+  // Get the actual width and height of the SVG container
+  var containerRect = svgContainer.getBoundingClientRect();
+  var containerWidth = containerRect.width;
+  var containerHeight = containerRect.height;
+
+  // Get the columns of the start and end elements
+  var startColumn = startElement.getAttribute('data-column');
+  var endColumn = endElement.getAttribute('data-column');
+
+  // Log data-column attributes for debugging
+  console.log('Start Column (Attribute):', startColumn);
+  console.log('End Column (Attribute):', endColumn);
+
+  // Set coordinates based on columns
+  console.log('Start Column:', startColumn);
+  console.log('End Column:', endColumn);
+
+  var x1, y1, x2, y2;
+
+  // Calculate coordinates based on columns
+  if (startColumn === 'left' && endColumn === 'middle') {
+    // Line from right edge of the left element to left edge of the middle element
+    x1 = startElement.offsetLeft + startElement.offsetWidth;
+    y1 = startElement.offsetTop + startElement.offsetHeight / 2;
+    x2 = endElement.offsetLeft;
+    y2 = endElement.offsetTop + endElement.offsetHeight / 2;
+    console.log('Line Coordinates (Before Normalization):', x1, y1, x2, y2);
+  } else if (startColumn === 'right' && endColumn === 'middle') {
+    // Line from left edge of the right element to right edge of the middle element
+    x1 = startElement.offsetLeft;
+    y1 = startElement.offsetTop + startElement.offsetHeight / 2;
+    x2 = endElement.offsetLeft + endElement.offsetWidth;
+    y2 = endElement.offsetTop + endElement.offsetHeight / 2;
+    console.log('Line Coordinates (Before Normalization):', x1, y1, x2, y2);
+  }
+
+  // Normalize coordinates based on the container dimensions
+  x1 = (x1 / containerWidth) * 100;
+  y1 = (y1 / containerHeight) * 100;
+  x2 = (x2 / containerWidth) * 100;
+  y2 = (y2 / containerHeight) * 100;
+
+  console.log('Normalized Coordinates:', x1, y1, x2, y2);
+
+  line.setAttribute('x1', x1 + '%');
+  line.setAttribute('y1', y1 + '%');
+  line.setAttribute('x2', x2 + '%');
+  line.setAttribute('y2', y2 + '%');
+  line.setAttribute('class', 'line');
+
+  svgContainer.appendChild(line);
+}
+
+function printPage() {
+  // Hide the print icon
+  var printIcon = document.getElementById('print-icon');
+  printIcon.classList.add('hidden');
+
+  // Toggle visibility of instructions1 and instructions2
+  instructions1.classList.toggle('hidden');
+  instructions2.classList.toggle('hidden');
+
+  // Trigger the browser's print functionality
+  window.print();
+
+  // Show the print icon and instructions1 again after a short delay (adjust the delay as needed)
+  setTimeout(function () {
+    printIcon.classList.remove('hidden');
+    instructions1.classList.remove('hidden');
+    instructions2.classList.add('hidden');
+  }, 500);
+}
+
+
+
+
+</script></body><html>
